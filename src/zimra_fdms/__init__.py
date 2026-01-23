@@ -7,8 +7,23 @@ Main entry point for the SDK
 from zimra_fdms.client import FdmsClient
 from zimra_fdms.exceptions import (
     FdmsError,
+    FdmsErrorCategory,
     ValidationError,
     NetworkError,
+    CryptoError,
+    ConfigError,
+)
+
+# HTTP Client
+from zimra_fdms.client import (
+    HttpClient,
+    HttpMethod,
+    HttpRequestOptions,
+    HttpResponse,
+    HttpAuditEntry,
+    CircuitState,
+    CircuitBreakerConfig,
+    NetworkErrorCode,
 )
 
 # Configuration
@@ -42,10 +57,22 @@ __version__ = "0.1.0"
 __all__ = [
     # Client
     "FdmsClient",
+    # HTTP Client
+    "HttpClient",
+    "HttpMethod",
+    "HttpRequestOptions",
+    "HttpResponse",
+    "HttpAuditEntry",
+    "CircuitState",
+    "CircuitBreakerConfig",
+    "NetworkErrorCode",
     # Exceptions
     "FdmsError",
+    "FdmsErrorCategory",
     "ValidationError",
     "NetworkError",
+    "CryptoError",
+    "ConfigError",
     # Configuration
     "FdmsConfig",
     "PartialFdmsConfig",
