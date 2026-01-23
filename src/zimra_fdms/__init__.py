@@ -11,6 +11,18 @@ from zimra_fdms.exceptions import (
     NetworkError,
 )
 
+# Configuration
+from zimra_fdms.config import (
+    FdmsConfig,
+    PartialFdmsConfig,
+    FdmsEnvironment,
+    ConfigLoader,
+    ConfigValidator,
+    FDMS_BASE_URLS,
+    ENV_VAR_MAPPING,
+    ConfigDefaults,
+)
+
 # Models
 from zimra_fdms.models import (
     Device,
@@ -28,10 +40,22 @@ from zimra_fdms.models import (
 __version__ = "0.1.0"
 
 __all__ = [
+    # Client
     "FdmsClient",
+    # Exceptions
     "FdmsError",
     "ValidationError",
     "NetworkError",
+    # Configuration
+    "FdmsConfig",
+    "PartialFdmsConfig",
+    "FdmsEnvironment",
+    "ConfigLoader",
+    "ConfigValidator",
+    "FDMS_BASE_URLS",
+    "ENV_VAR_MAPPING",
+    "ConfigDefaults",
+    # Models
     "Device",
     "Receipt",
     "ReceiptLineItem",

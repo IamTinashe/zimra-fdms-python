@@ -1,0 +1,17 @@
+{
+  "device_id": "YOUR_DEVICE_ID",
+  "device_serial_no": "YOUR_SERIAL_NUMBER",
+  "activation_key": "YOUR_ACTIVATION_KEY",
+  "device_model_name": "YOUR_MODEL_NAME",
+  "device_model_version": "1.0.0",
+  "certificate": "./certs/device.pem",
+  "private_key": "./certs/device.key",
+  "private_key_password": "",
+  "environment": "test",
+  "timeout": 30000,
+  "retry_attempts": 3,
+  "retry_delay": 1000,
+  "enable_audit_log": true,
+  "audit_log_path": "./logs/audit.log",
+  "state_store_path": "./data/fiscal-state.json"
+}
