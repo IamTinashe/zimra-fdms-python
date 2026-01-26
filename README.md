@@ -11,7 +11,9 @@ Production-grade SDK for integrating with Zimbabwe Revenue Authority's (ZIMRA) F
 
 - ✅ Full ZIMRA FDMS API v7.2 compliance
 - 🔐 Security-first cryptographic operations
-- 📝 Complete audit logging
+- � X.509 certificate management with CSR generation
+- 🔒 Secure encrypted key storage (AES-256-GCM)
+- �📝 Complete audit logging
 - 🔄 Automatic retry and offline queue
 - 📊 Real-time fiscal day management
 - 🧾 Receipt signing and QR code generation
@@ -52,6 +54,53 @@ receipt = client.submit_receipt({
 
 # Close fiscal day
 client.close_fiscal_day()
+```
+
+## Certificate Management
+
+The SDK provides comprehensive X.509 certificate management:
+
+```python
+from zimra_fdms.crypto import CertificateManager, KeyStore, KeyStoreOptions, CsrOptions
+
+# Certificate Manager
+cert_manager = CertificateManager()
+
+# Load existing certificate and key
+cert = cert_manager.load_certificate('./device-cert.pem')
+private_key = cert_manager.load_private_key('./device-key.pem', password='password')
+
+# Generate new RSA key pair (4096-bit recommended)
+key_pair = cert_manager.generate_key_pair(key_size=4096)
+
+# Generate CSR for device registration
+csr = cert_manager.generate_csr(
+    private_key=key_pair['private_key'],
+    options=CsrOptions(
+        common_name='DEVICE-12345',
+        organization_name='My Company',
+        country_name='ZW'
+    )
+)
+
+# Validate certificate
+validation = cert_manager.validate_certificate(cert)
+if not validation.valid:
+    print('Certificate issues:', validation.errors)
+
+# Secure Key Storage
+key_store = KeyStore(KeyStoreOptions(
+    store_path='./keystore.json',
+    password='secure-password'
+))
+
+key_store.load()
+key_store.set_key_pair('device-key', private_key, cert)
+key_store.save()
+
+# Retrieve later
+stored_key = key_store.get_private_key('device-key')
+stored_cert = key_store.get_certificate('device-key')
 ```
 
 ## Documentation
