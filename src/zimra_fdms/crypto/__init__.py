@@ -3,10 +3,21 @@
 This module provides cryptographic services for ZIMRA FDMS integration:
 - CertificateManager: X.509 certificate handling
 - KeyStore: Secure key storage
-- SignatureService: Digital signatures (Phase 3.2)
+- SignatureService: Digital signatures
 """
 
-from zimra_fdms.crypto.signature import SignatureService
+from zimra_fdms.crypto.signature import (
+    SignatureService,
+    SignatureServiceOptions,
+    SignatureResult,
+    VerificationResult as SignatureVerificationResult,
+    ReceiptSignatureData,
+    ReceiptLineItemData,
+    ReceiptTaxData,
+    ReceiptPaymentData,
+    FiscalDayReportData,
+    TaxRateTotalData,
+)
 from zimra_fdms.crypto.certificate import (
     CertificateManager,
     CertificateInfo,
@@ -37,6 +48,15 @@ __all__ = [
     "KeyStoreEntry",
     "KeyStoreOptions",
     "KeyStoreDefaults",
-    # Signature Service (Phase 3.2)
+    # Signature Service
     "SignatureService",
+    "SignatureServiceOptions",
+    "SignatureResult",
+    "SignatureVerificationResult",
+    "ReceiptSignatureData",
+    "ReceiptLineItemData",
+    "ReceiptTaxData",
+    "ReceiptPaymentData",
+    "FiscalDayReportData",
+    "TaxRateTotalData",
 ]
