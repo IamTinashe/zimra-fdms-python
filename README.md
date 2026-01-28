@@ -12,8 +12,7 @@ Production-grade SDK for integrating with Zimbabwe Revenue Authority's (ZIMRA) F
 - ✅ Full ZIMRA FDMS API v7.2 compliance
 - 🔐 Security-first cryptographic operations
 - � X.509 certificate management with CSR generation
-- 🔒 Secure encrypted key storage (AES-256-GCM)
-- �📝 Complete audit logging
+- 🔒 Secure encrypted key storage (AES-256-GCM)- ✍️ RSA-SHA256 digital signatures for receipts- �📝 Complete audit logging
 - 🔄 Automatic retry and offline queue
 - 📊 Real-time fiscal day management
 - 🧾 Receipt signing and QR code generation
@@ -101,6 +100,68 @@ key_store.save()
 # Retrieve later
 stored_key = key_store.get_private_key('device-key')
 stored_cert = key_store.get_certificate('device-key')
+```
+
+## Digital Signatures
+
+The SDK provides RSA-SHA256 digital signature services for receipts and fiscal day reports:
+
+```python
+from zimra_fdms.crypto import (
+    SignatureService, SignatureServiceOptions,
+    ReceiptSignatureData, ReceiptLineItemData, ReceiptTaxData, ReceiptPaymentData,
+    FiscalDayReportData, TaxRateTotalData
+)
+
+# Create signature service with private key
+signature_service = SignatureService(SignatureServiceOptions(
+    private_key=open('./device-key.pem').read(),
+    private_key_password='password',
+    enable_cache=True  # Cache signatures for identical data
+))
+
+# Sign a receipt
+receipt_result = signature_service.sign_receipt(ReceiptSignatureData(
+    device_id=12345,
+    receipt_type='FiscalInvoice',
+    receipt_currency='USD',
+    receipt_counter=1,
+    receipt_global_no=100,
+    invoice_no='INV-001',
+    receipt_date='2025-01-26T10:00:00Z',
+    receipt_line_items=[
+        ReceiptLineItemData(line_no=1, line_description='Product A', line_quantity=2,
+                           line_unit_price=500, line_tax_percent=15, line_total=1000)
+    ],
+    receipt_taxes=[
+        ReceiptTaxData(tax_code='A', tax_percent=15, tax_amount=150, sales_amount_with_tax=1150)
+    ],
+    receipt_payments=[
+        ReceiptPaymentData(money_type_code=0, payment_amount=1150)
+    ],
+    receipt_total=1150
+))
+
+print('Receipt Signature:', receipt_result.signature)
+
+# Sign fiscal day report
+day_result = signature_service.sign_fiscal_day_report(FiscalDayReportData(
+    device_id=12345,
+    fiscal_day_no=1,
+    fiscal_day_opened='2025-01-26T08:00:00Z',
+    receipt_counter=50,
+    receipt_counter_by_type={'FiscalInvoice': 48, 'CreditNote': 2},
+    total_amount=125000,
+    total_tax=16304.35,
+    totals_by_tax_rate=[TaxRateTotalData(tax_percent=15, tax_amount=16304.35)]
+))
+
+print('Day Signature:', day_result.signature)
+
+# Verify a signature
+verification = signature_service.verify_receipt_signature(receipt_data, signature)
+if verification.valid:
+    print('Signature is valid')
 ```
 
 ## Documentation
